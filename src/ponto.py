@@ -40,7 +40,7 @@ class Ponto(object):
         self.add_nome_bolsista()
         self.add_nome_modalidade_bolsa()
         self.add_mes_ano()
-        self.preenche_fim_semana()
+        self.preenche_fins_semana()
         self.add_observacao()
 
         
@@ -152,7 +152,8 @@ class Ponto(object):
         data = self.get_data()
         return '{:02d}:{:02d}'.format(data.hour, data.minute)
 
-    def preenche_fim_semana(self):
+
+    def preenche_fins_semana(self):
         data = self.get_data()
 
         calen = calendar.Calendar()
@@ -160,12 +161,15 @@ class Ponto(object):
             if mes != data.month:
                 continue
             if dia_semana == calendar.SATURDAY:
-                cell1  = self.table[0].cell(dia + 2, 1)
-                cell2  = self.table[0].cell(dia + 2, 3)
-                self.add_conteudo_celula(cell1, 'SÁBADO')
-                self.add_conteudo_celula(cell2, 'SÁBADO')
+                self.preenche_fim_semana(dia, 'SÁBADO')
+
             if dia_semana == calendar.SUNDAY:
-                cell1  = self.table[0].cell(dia + 2, 1)
-                cell2  = self.table[0].cell(dia + 2, 3)
-                self.add_conteudo_celula(cell1, 'DOMINGO')
-                self.add_conteudo_celula(cell2, 'DOMINGO')
+                self.preenche_fim_semana(dia, 'DOMINGO')
+
+    
+    def preenche_fim_semana(self, dia_mes, dia_semana):
+        cell1  = self.table[0].cell(dia_mes + 2, 1)
+        cell2  = self.table[0].cell(dia_mes + 2, 3)
+        self.add_conteudo_celula(cell1, dia_semana)
+        self.add_conteudo_celula(cell2, dia_semana)
+

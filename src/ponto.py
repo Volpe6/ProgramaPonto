@@ -1,4 +1,5 @@
 import datetime
+import calendar
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from pathlib import Path
@@ -39,6 +40,7 @@ class Ponto(object):
         self.add_nome_bolsista()
         self.add_nome_modalidade_bolsa()
         self.add_mes_ano()
+        self.preenche_fim_semana()
         self.add_observacao()
 
         
@@ -150,13 +152,20 @@ class Ponto(object):
         data = self.get_data()
         return '{:02d}:{:02d}'.format(data.hour, data.minute)
 
+    def preenche_fim_semana(self):
+        data = self.get_data()
 
-# doc = Document('C:/Users/Drew/Documents/python/ponto/pontos/ponto-junho-2020/ponto-junho.docx')
-# doc = Document('modelo-ponto.docx')
-
-# table = doc.tables
-
-# for td in table:
-#     for row in range(len(td.rows)):
-#         for col in range(len(td.columns)):
-#             print(f'linha: {row}, col: {col}. conteudo: {td.cell(row, col).text}')
+        calen = calendar.Calendar()
+        for ano, mes, dia, dia_semana in calen.itermonthdays4(data.year, data.month):
+            if mes != data.month:
+                continue
+            if dia_semana == calendar.SATURDAY:
+                cell1  = self.table[0].cell(dia + 2, 1)
+                cell2  = self.table[0].cell(dia + 2, 3)
+                self.add_conteudo_celula(cell1, 'SÁBADO')
+                self.add_conteudo_celula(cell2, 'SÁBADO')
+            if dia_semana == calendar.SUNDAY:
+                cell1  = self.table[0].cell(dia + 2, 1)
+                cell2  = self.table[0].cell(dia + 2, 3)
+                self.add_conteudo_celula(cell1, 'DOMINGO')
+                self.add_conteudo_celula(cell2, 'DOMINGO')

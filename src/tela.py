@@ -7,9 +7,9 @@ class Tela(object):
 
         self.master = master
         self.ponto = Ponto(
-            'Ponha seu nome aqui',
-            'Ponha sua modalidade de bolsa aqui',
-            []#Ponha as observações aqui
+            'ponha seu nome aqui',
+            'Ponha a modalidade da bolsa aqui',
+            ['']#Ponha as observações aqui
         )
         self.ponto.processa()
 
